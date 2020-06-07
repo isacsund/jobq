@@ -4,7 +4,9 @@ version = "0.1.0"
 authors = ["Isac Sund <isac.sund@outlook.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]] # Bin to run the main server
+name = "server"
+path = "src/bin/main.rs"
 
 [dependencies]
 tokio = { version = "0.2", features = ["full"] }
