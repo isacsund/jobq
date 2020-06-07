@@ -1,6 +1,7 @@
 use diesel::r2d2::{ConnectionManager, Pool};
 use diesel::PgConnection;
 
+use jobq::server::Server;
 use jobq::settings::Settings;
 
 #[tokio::main]
@@ -16,4 +17,9 @@ async fn main() {
 
     // Get the connection
     let conn = pool.get().unwrap();
+
+    println!("Starting server at {:?}", settings.server.bind);
+    let server = Server::new(settings.server.bind);
+
+    server.run().await;
 }

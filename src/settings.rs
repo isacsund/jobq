@@ -1,4 +1,4 @@
-use config::{Config, ConfigError, Environment, File};
+use config::{Config, ConfigError, File};
 use serde::Deserialize;
 
 static CONFIG_FILE_DEFAULTS: &str = "config/settings.toml";
@@ -6,6 +6,7 @@ static CONFIG_FILE_DEFAULTS: &str = "config/settings.toml";
 #[derive(Debug, Deserialize, Clone)]
 pub struct Settings {
     pub database: Database,
+    pub server: Server,
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -16,6 +17,11 @@ pub struct Database {
     pub port: i32,
     pub database: String,
     pub pool_size: u32,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct Server {
+    pub bind: String,
 }
 
 impl Settings {
