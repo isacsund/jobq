@@ -1,8 +1,12 @@
 use diesel::r2d2::{ConnectionManager, Pool};
 use diesel::PgConnection;
 
+use std::time::Duration;
+use tokio::time::delay_for;
+
 use jobq::server::Server;
 use jobq::settings::Settings;
+use jobq::worker::{TestWorker, Worker};
 
 #[tokio::main]
 async fn main() {
@@ -18,8 +22,19 @@ async fn main() {
     // Get the connection
     let conn = pool.get().unwrap();
 
+    let worker_config = settings.clone();
+
     println!("Starting server at {:?}", settings.server.bind);
     let server = Server::new(settings.server.bind);
 
-    server.run().await;
+    tokio::spawn(async move {
+        server.run().await;
+    });
+
+    delay_for(Duration::from_secs(1)).await;
+
+    tokio::spawn(async move {
+        TestWorker.work(&worker_config.server.bind).await;
+    })
+    .await;
 }

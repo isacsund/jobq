@@ -8,6 +8,7 @@ use tmq::{Message, Multipart};
 pub mod schema;
 pub mod server;
 pub mod settings;
+pub mod worker;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ServerMessage {
@@ -21,9 +22,22 @@ pub enum ClientMessage {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub enum WorkerMessage {
+    Hello,
+    Order(Job),
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct JobRequest {
     pub name: String,
     pub username: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Job {
+    pub id: i64,
+    pub username: String,
+    pub name: String,
 }
 
 pub trait ToMpart {

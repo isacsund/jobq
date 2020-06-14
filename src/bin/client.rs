@@ -30,16 +30,14 @@ async fn main() -> Result<(), Error> {
     send.send(ClientMessage::Hello.to_mpart()?).await?;
 
     if let ClientMessage::Hello = get_message(&mut recv).await? {
-        println!("Received Hello response, sending a couple of jobs");
+        println!("Received Hello response, sending a job");
 
-        for i in 0..500 {
-            let job = JobRequest {
-                name: "test".into(),
-                username: "test_client".into(),
-            };
+        let job = JobRequest {
+            name: "test_worker".into(),
+            username: "test_client".into(),
+        };
 
-            send.send(ServerMessage::Request(job).to_mpart()?).await?;
-        }
+        send.send(ServerMessage::Request(job).to_mpart()?).await?;
 
         println!("Done!");
     }
